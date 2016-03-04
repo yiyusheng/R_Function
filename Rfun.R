@@ -72,3 +72,14 @@ splitToDF <- function(data,split = '_',header = ''){
   }
   return(r)
 }
+
+# F7. Convert factor to its original data type
+fct2ori <- function(f){
+  a <- levels(f)[f]
+  a
+}
+
+# F8. Quantile with seq(0,1,0.01)
+quantileX <- function(v){
+  quantile(v,seq(0,1,0.01),na.rm = T)
+}
