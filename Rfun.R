@@ -83,3 +83,12 @@ fct2ori <- function(f){
 quantileX <- function(v){
   quantile(v,seq(0,1,0.01),na.rm = T)
 }
+
+# F9. match array of attr from A to B(No Merge)
+mchAttr <- function(dfA,dfB,attr,idx){
+  for(a in attr){
+    dfA[[a]] <- dfB[[a]][match(dfA[[idx]],dfB[[idx]])]
+  }
+  dfA
+  
+}
