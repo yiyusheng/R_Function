@@ -28,7 +28,7 @@ factorX <- function(data){
   return(data)
 }
 
-# F3. calculate entropy for A column.
+# F3. 计算A列中每种类型中B占比的熵,再以A中各类的占比作为权值计算平均熵,即B关于A的条件熵
 entropy <- function(A,B) {
   A <- factor(A)
   B <- factor(B)
@@ -55,7 +55,7 @@ factorColX <- function(data,col){
   data
 }
 
-# F5. table for more columns
+# F5. 为多行内容进行table
 colTableX <- function(data,col,decreasing = T,rm.na = F){
   colMerge <- data[[col[1]]]
   for (i in seq(2,length(col))){
@@ -64,7 +64,7 @@ colTableX <- function(data,col,decreasing = T,rm.na = F){
   return(tableX(colMerge,decreasing = decreasing))
 }
 
-# F6. split col and merger them into a new data.frame
+# F6. 拆分合并之后的col，并输出data.frame
 splitToDF <- function(data,split = '_',header = ''){
   r <- data.frame(matrix(unlist(strsplit(as.character(data),split)),byrow = T,nrow = length(data)))
   if (header[1] != ''){
@@ -90,41 +90,5 @@ mchAttr <- function(dfA,dfB,attr,idx){
     dfA[[a]] <- dfB[[a]][match(dfA[[idx]],dfB[[idx]])]
   }
   dfA
-}
-
-# F10.unname all columns in dataframe
-unnameX <- function(df){
-  for(i in 1:length(df)){
-    df[,i] <- unname(df[,i])
-  }
-  df
-}
-
-# F11. Multiplot
-multiplot <- function(..., plotlist = NULL, file, cols = 1, layout = NULL) {
-  require(grid)
   
-  plots <- c(list(...), plotlist)
-  
-  numPlots = length(plots)
-  
-  if (is.null(layout)) {
-    layout <- matrix(seq(1, cols * ceiling(numPlots/cols)),
-                     ncol = cols, nrow = ceiling(numPlots/cols))
-  }
-  
-  if (numPlots == 1) {
-    print(plots[[1]])
-    
-  } else {
-    grid.newpage()
-    pushViewport(viewport(layout = grid.layout(nrow(layout), ncol(layout))))
-    
-    for (i in 1:numPlots) {
-      matchidx <- as.data.frame(which(layout == i, arr.ind = TRUE))
-      
-      print(plots[[i]], vp = viewport(layout.pos.row = matchidx$row,
-                                      layout.pos.col = matchidx$col))
-    }
-  }
 }
