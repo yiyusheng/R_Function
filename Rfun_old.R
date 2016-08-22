@@ -28,7 +28,7 @@ factorX <- function(data){
   return(data)
 }
 
-# F3. 计算A列中每种类型中B占比的熵,再以A中各类的占比作为权值计算平均熵,即B关于A的条件熵
+# F3. 璁＄畻A鍒椾腑姣忕绫诲瀷涓瑽鍗犳瘮鐨勭喌,鍐嶄互A涓悇绫荤殑鍗犳瘮浣滀负鏉冨�艰绠楀钩鍧囩喌,鍗矪鍏充簬A鐨勬潯浠剁喌
 entropy <- function(A,B) {
   A <- factor(A)
   B <- factor(B)
@@ -55,7 +55,7 @@ factorColX <- function(data,col){
   data
 }
 
-# F5. 为多行内容进行table
+# F5. 涓哄琛屽唴瀹硅繘琛宼able
 colTableX <- function(data,col,decreasing = T,rm.na = F){
   colMerge <- data[[col[1]]]
   for (i in seq(2,length(col))){
@@ -64,7 +64,7 @@ colTableX <- function(data,col,decreasing = T,rm.na = F){
   return(tableX(colMerge,decreasing = decreasing))
 }
 
-# F6. 拆分合并之后的col，并输出data.frame
+# F6. 鎷嗗垎鍚堝苟涔嬪悗鐨刢ol锛屽苟杈撳嚭data.frame
 splitToDF <- function(data,split = '_',header = ''){
   r <- data.frame(matrix(unlist(strsplit(as.character(data),split)),byrow = T,nrow = length(data)))
   if (header[1] != ''){
