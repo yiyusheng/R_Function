@@ -85,9 +85,9 @@ quantileX <- function(v){
 }
 
 # F9. match array of attr from A to B(No Merge)
-mchAttr <- function(dfA,dfB,attr,idx){
+mchAttr <- function(dfA,dfB,idxA,idxB,attr){
   for(a in attr){
-    dfA[[a]] <- dfB[[a]][match(dfA[[idx]],dfB[[idx]])]
+    dfA[[a]] <- dfB[[a]][match(dfA[[idxA]],dfB[[idxB]])]
   }
   dfA
 }
@@ -127,4 +127,21 @@ multiplot <- function(..., plotlist = NULL, file, cols = 1, layout = NULL) {
                                       layout.pos.col = matchidx$col))
     }
   }
+}
+
+# F12.convert list from tapply to data.frame
+list2df <- function(list,names = NULL){
+  df <- data.frame(matrix(unlist(list),byrow = T,nrow = length(list)))
+  df$item <- as.numeric(names(list))
+  row.names(df) <- NULL
+  if(!is.null(names)){
+    names(df) <- names
+  }
+  df
+}
+
+# F13.convert factor to origin, then convert to numeric
+fct2num <- function(arr){
+  arr <- as.numeric(fct2ori(arr))
+  arr
 }
