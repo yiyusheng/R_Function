@@ -130,7 +130,7 @@ multiplot <- function(..., plotlist = NULL, file, cols = 1, layout = NULL) {
 }
 
 # F12.convert list from tapply to data.frame
-list2df <- function(list,names = NULL){
+list2df <- function(list,byrow = T,names = NULL){
   df <- data.frame(matrix(unlist(list),byrow = T,nrow = length(list)))
   df$item <- as.numeric(names(list))
   row.names(df) <- NULL
@@ -144,4 +144,38 @@ list2df <- function(list,names = NULL){
 fct2num <- function(arr){
   arr <- as.numeric(fct2ori(arr))
   arr
+}
+
+# F14.return multiple value and recive by list
+# from https://raw.githubusercontent.com/ggrothendieck/gsubfn/master/R/list.R
+list <- structure(NA,class="result")
+"[<-.result" <- function(x,...,value) {
+  args <- as.list(match.call())
+  args <- args[-c(1:2,length(args))]
+  length(value) <- length(args)
+  for(i in seq(along=args)) {
+    a <- args[[i]]
+    if(!missing(a)) eval.parent(substitute(a <- v,list(a=a,v=value[[i]])))
+  }
+  x
+}
+
+# F15.extract some lines from a data.frame randomly
+smp_df <- function(df,perc,rep = F){
+  len <- nrow(df)
+  df[sample(seq_len(len),len*perc,rep),]
+}
+
+# F16. colMax like colSum
+colMax <- function(data) sapply(data, max, na.rm = TRUE)
+
+# F17. parallal lapply
+lapplyX <- function(paraObj,fun = fun,coreUse = 0.9){
+  require(doParallel)
+  numCore <- floor(detectCores()*coreUse)
+  ck <- makeCluster(min(numCore,length(paraObj)),outfile = '')
+  registerDoParallel(ck)
+  r <- foreach(i = paraObj,.verbose = T) %dopar% fun(i)
+  stopCluster(ck)
+  r
 }
