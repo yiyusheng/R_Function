@@ -179,3 +179,34 @@ lapplyX <- function(paraObj,fun = fun,coreUse = 0.9){
   stopCluster(ck)
   r
 }
+
+# F18.order or column change
+col_order <- function(df,tar,app){
+  n <- names(df)
+  idx.tar <- which(n == tar)
+  
+  n.noapp <- n[n != tar]
+  idx.app <- which(n == app)
+  
+  
+  newN <- c(n.noapp[1:idx.app],n[idx.tar],n.noapp[(idx.app+1):length(n.noapp)])
+  
+  df <- df[,newN]
+}
+
+# F19.return a data.frame with all factor column restored
+fct2oriX <- function(data){
+  a <- sapply(data,class)
+  for(i in 1:length(a)){
+    if(a[i]=='factor')
+      data[,i] <- fct2ori(data[,i])
+  }
+  return(data)
+}
+
+# F20.melt table
+meltX <- function(x,y){
+  tmp <- melt(table(x,y))
+  tmp <- subset(tmp,value != 0)
+  tmp
+}
