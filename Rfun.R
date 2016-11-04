@@ -130,13 +130,10 @@ multiplot <- function(..., plotlist = NULL, file, cols = 1, layout = NULL) {
 }
 
 # F12.convert list from tapply to data.frame
-list2df <- function(list,byrow = T,names = NULL){
-  df <- data.frame(matrix(unlist(list),byrow = T,nrow = length(list)))
-  df$item <- as.numeric(names(list))
-  row.names(df) <- NULL
-  if(!is.null(names)){
-    names(df) <- names
-  }
+list2df <- function(list,br = T,n = NULL){
+  df <- data.frame(matrix(unlist(list),byrow = br,nrow = length(list)))
+  x <- ifelse(is.null(names(list)),1 == 1,df$item <- names(list))
+  x <- ifelse(is.null(n),1 == 1,names(df) <- n)
   df
 }
 
@@ -209,4 +206,36 @@ meltX <- function(x,y){
   tmp <- melt(table(x,y))
   tmp <- subset(tmp,value != 0)
   tmp
+}
+
+# F21. as.POSIXct convert
+as.p <- function(ts){
+  if(class(ts) == 'factor'){
+    r <-   as.POSIXct(fct2ori(ts),tz = 'UTC')
+  }else if(class(ts) == 'character'){
+    r <-   as.POSIXct(ts,tz = 'UTC')
+  }
+  r
+}
+
+# F22.factorX(subset)
+subsetX <- function(...){
+  factorX(subsetX(...))
+}
+
+# F23.foreachX
+foreachX <- function(Object.para,func,...){
+  f <- get(func)
+  para <- Object.para
+  require(doParallel)
+  ck <- makeCluster(min(40,length(para)), outfile = '')
+  registerDoParallel(ck)
+  r <- foreach(i = para,.verbose = T) %dopar% f(i,...)
+  stopCluster(ck)
+  r
+}
+
+# F24. define margin for plot function
+def_margin <- function(){
+  par(mar = rep(1,4))
 }
