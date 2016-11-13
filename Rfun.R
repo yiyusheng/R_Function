@@ -239,3 +239,21 @@ foreachX <- function(Object.para,func,...){
 def_margin <- function(){
   par(mar = rep(1,4))
 }
+
+# F25. evaluate biclassification
+base_eval <- function(resp,pred){
+  TP <- sum(resp == 1 & pred == 1)
+  FN <- sum(resp == 1 & pred == 0)
+  TN <- sum(resp == 0 & pred == 0)
+  FP <- sum(resp == 0 & pred == 1)
+  
+  P <- TP + FN
+  N <- TN + FP
+  
+  FDR <- TP/P
+  FAR <- FP/N
+  
+  acc <- (TP + TN)/length(resp)
+  
+  list(TP,FN,TN,FP,P,N,FDR,FAR,acc)
+}
