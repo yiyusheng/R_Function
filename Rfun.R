@@ -255,5 +255,13 @@ base_eval <- function(resp,pred){
   
   acc <- (TP + TN)/length(resp)
   
-  list(TP,FN,TN,FP,P,N,FDR,FAR,acc)
+  F1 <- (2*TP)/(2*TP + FP + FN)
+  
+  list(TP,FN,TN,FP,P,N,FDR,FAR,acc,F1)
+}
+
+# F26. change names from A to B in a data.frame
+change_name <- function(df,n1,n2){
+  names(df)[which(names(df) == n1)] <- n2
+  df
 }
