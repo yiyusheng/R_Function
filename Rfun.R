@@ -130,8 +130,8 @@ multiplot <- function(..., plotlist = NULL, file, cols = 1, layout = NULL) {
 }
 
 # F12.convert list from tapply to data.frame
-list2df <- function(list,br = T,n = NULL){
-  df <- data.frame(matrix(unlist(list),byrow = br,nrow = length(list)))
+list2df <- function(list,n = NULL,br = T,rec = F){
+  df <- data.frame(matrix(unlist(list,recursive = rec),byrow = br,nrow = length(list)))
   x <- ifelse(is.null(names(list)),1 == 1,df$item <- names(list))
   x <- ifelse(is.null(n),1 == 1,names(df) <- n)
   df
@@ -253,15 +253,29 @@ base_eval <- function(resp,pred){
   FDR <- TP/P
   FAR <- FP/N
   
-  acc <- (TP + TN)/length(resp)
+  ACC <- (TP + TN)/length(resp)
   
   F1 <- (2*TP)/(2*TP + FP + FN)
   
-  list(TP,FN,TN,FP,P,N,FDR,FAR,acc,F1)
+  list(tp = TP,fn = FN,tn = TN,fp = FP,
+       p = P,n = N,
+       fdr = FDR,far = FAR,f1 = F1,acc = ACC)
 }
 
 # F26. change names from A to B in a data.frame
 change_name <- function(df,n1,n2){
   names(df)[which(names(df) == n1)] <- n2
   df
+}
+
+# F27. normalize array/col of matrix in range of [0,1]
+normalize <- function(x){
+  x <- as.matrix(x)
+  minAttr=apply(x, 2, min)
+  maxAttr=apply(x, 2, max)
+  x <- sweep(x, 2, minAttr, FUN="-") 
+  x=sweep(x, 2,  maxAttr-minAttr, "/") 
+  attr(x, 'normalized:min') = minAttr
+  attr(x, 'normalized:max') = maxAttr
+  return (x)
 }
