@@ -279,3 +279,13 @@ normalize <- function(x){
   attr(x, 'normalized:max') = maxAttr
   return (x)
 }
+
+# F28.extract string with regexp
+extract_reg <- function(pat,str,sameLen = T){
+  idx_need <- grep(pat,str)
+  idx_start <- regexpr(pat,str)
+  r <- rep('',length(idx_start))
+  r[idx_need] <- regmatches(str,idx_start)
+  if(sameLen)return(r)
+  else return(r[idx_need])
+}
