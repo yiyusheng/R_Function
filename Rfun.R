@@ -289,3 +289,8 @@ extract_reg <- function(pat,str,sameLen = T){
   if(sameLen)return(r)
   else return(r[idx_need])
 }
+
+# F29.sort level of factor by number
+sort_level <- function(f){
+  f <- factor(f,levels = sort(fct2num(f)))
+}
