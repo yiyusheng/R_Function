@@ -294,3 +294,15 @@ extract_reg <- function(pat,str,sameLen = T){
 sort_level <- function(f){
   f <- factor(f,levels = sort(fct2num(f)))
 }
+
+# F30. melt(table(x)) ,remove item of zero and modify the name
+melt_table <- function(...){
+  r <- melt(table(...))
+  r <- subset(r,value != 0)
+  r
+}
+
+# F31. coefficient variable
+coef_var <- function(arr){
+  sd(arr,na.rm = T)/mean(arr,na.rm = T)
+}
