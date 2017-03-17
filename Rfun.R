@@ -160,7 +160,11 @@ list <- structure(NA,class="result")
 # F15.extract some lines from a data.frame randomly
 smp_df <- function(df,perc,rep = F){
   len <- nrow(df)
-  df[sample(seq_len(len),len*perc,rep),]
+  if(perc <= 1){
+    df[sample(seq_len(len),len*perc,rep),]
+  }else{
+    df[sample(seq_len(len),perc,rep),]
+  }
 }
 
 # F16. colMax like colSum
@@ -305,4 +309,21 @@ melt_table <- function(...){
 # F31. coefficient variable
 coef_var <- function(arr){
   sd(arr,na.rm = T)/mean(arr,na.rm = T)
+}
+
+# F32. round with 4 digits
+roundX <- function(arr){
+  round(arr,digits = 4)
+}
+
+# F33. remove items(lines) with any element of it is some value (default:NA)
+remove_line_byvalue <- function(df,v = NA){
+  idx <- which(rowSums(is.na(df)) != 0)
+  factorX(df[-idx,])
+}
+
+# F34. create a data.frame which is in the same structure and a default value with a existing one
+create_mirror_df <- function(df,default = 0){
+  df[seq_len(dim(df)[1]),seq_len(dim(df)[2])] <- default
+  df
 }
