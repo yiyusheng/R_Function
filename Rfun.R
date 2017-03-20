@@ -327,3 +327,8 @@ create_mirror_df <- function(df,default = 0){
   df[seq_len(dim(df)[1]),seq_len(dim(df)[2])] <- default
   df
 }
+
+# F35. rbind data.frame from lapply
+lapplyX <- function(...){
+  do.call(rbind,lapply(...))
+}
