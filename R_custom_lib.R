@@ -196,7 +196,7 @@ extract_reg <- function(pat,str,sameLen = T){
 
 # F18.sort level of factor by number
 sort_level <- function(f){
-  f <- factor(f,levels = sort(fct2num(f)))
+  f <- factor(f,levels = sort((as.numeric(levels(f)))))
 }
 
 # F19. melt(table(x)) ,remove item of zero and modify the name
@@ -233,11 +233,15 @@ create_mirror_df <- function(df,default = 0){
   df
 }
 
-# F24. rbind data.frame from lapply
+# F24A. rbind data.frame from lapply
 lapplyX <- function(...){
   do.call(rbind,lapply(...))
 }
 
+# F24B. rbind data.frame from tapply
+tapplyX <- function(...){
+  do.call(rbind,tapply(...))
+}
 
 # F25. wrap foreach from doParallel
 foreachX <- function(idx,func,outname = NULL,...){
