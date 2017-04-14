@@ -11,7 +11,7 @@
 #
 # Initial created: 2017-03-20 16:25:46
 #
-# Last   modified: 2017-03-24 17:10:19
+# Last   modified: 2017-04-07 17:13:18
 #
 #
 #
@@ -223,8 +223,8 @@ remove_line_byvalue <- function(df,v = NA){
   }else{
     idx <- which(rowSums(df == v) != 0)
   }
-  
-  factorX(df[-idx,])
+  if(length(idx) == 0){return(df)}
+  else{return(factorX(df[-idx,]))}
 }
 
 # F23. create a data.frame which is in the same structure and a default value with a existing one
@@ -244,18 +244,19 @@ tapplyX <- function(...){
 }
 
 # F25. wrap foreach from doParallel
-foreachX <- function(idx,func,outname = NULL,...){
+foreachX <- function(idx,func,outname = NULL,frac_cores = 0.8,...){
   f <- get(func)
   
   if(is.null(outname))outname <- func
+  if(outname == -1)outname <- NULL
   outname <- paste(outname,format(Sys.time(), "%Y%m%d-%H%M%S"),sep='@')
   path_outname <- file.path(dir_d,'log',outname)
   if(file.exists(path_outname))x <- file.remove(path_outname)
   
   require(doParallel)
-  ck <- makeCluster(min(floor(detectCores()*0.9),length(idx)),type = 'FORK',outfile = path_outname)
+  ck <- makeCluster(min(floor(detectCores()*frac_cores),length(idx)),type = 'FORK',outfile = path_outname)
   registerDoParallel(ck)
-  r <- foreach(i = idx,.verbose = F) %dopar% tryCatch(f(i,...),error = function(e){cat(sprintf("ERROR:%s\n%s\n",fname[i],e))})
+  r <- foreach(i = idx,.verbose = F) %dopar% tryCatch(f(i,...),error = function(e){cat(sprintf("ERROR:%s\nIn %s\n",i,e))})
   stopCluster(ck)
   r
 }
@@ -275,6 +276,8 @@ rand_palette <- function(){
 }
 
 # F28. generate rate of a array
+# When you use this array with apply,the result will be column based
+# transfor the result if needed
 array_rate <- function(arr){
   roundX(arr/sum(arr,na.rm = T))
 }
@@ -282,4 +285,25 @@ array_rate <- function(arr){
 # F29. subset wrapped by factorX
 subsetX <- function(...){
   factorX(subset(...))
+}
+
+# F30. check exist of dir. If false, then create it
+check_dir <- function(d){
+  if(!dir.exists(d))dir.create(d)
+}
+
+# F31. replace value1 with value2 in a data.frame
+replace_value <- function(df,v1 = NA,v2 = 0){
+  if(is.na(v1)){
+    df[is.na(df)] <- v2
+  }else if(is.null(v1)){
+    df[apply(df,2,function(x)is.null(as.numeric(x)))] <- v2
+  }else if(is.infinite(v1)){
+    df[apply(df,2,function(x)is.infinite(as.numeric(x)))] <- v2
+  }else if(is.nan(v1)){
+    df[apply(df,2,function(x)is.nan(as.numeric(x)))] <- v2
+  }else{
+    df[df == v1] <- v2
+  }
+  return(df)
 }
