@@ -289,7 +289,10 @@ subsetX <- function(...){
 
 # F30. check exist of dir. If false, then create it
 check_dir <- function(d){
-  if(!dir.exists(d))dir.create(d)
+  if(!dir.exists(d)){
+    dir.create(d)
+    cat(sprintf('CREATE DIRECTORY %s',d))
+  }
 }
 
 # F31. replace value1 with value2 in a data.frame
@@ -306,4 +309,11 @@ replace_value <- function(df,v1 = NA,v2 = 0){
     df[df == v1] <- v2
   }
   return(df)
+}
+
+# F32. modify unformat time to 1970-01-01 00:00:00
+modify_unformat_time <- function(arr){
+  if(is.factor(arr))arr <- fct2ori(arr)
+  arr[!grepl('\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}',arr)] <- '1970-01-01 00:00:00'
+  as.p(arr)
 }
