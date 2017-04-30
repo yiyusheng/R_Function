@@ -160,7 +160,7 @@ def_margin <- function(){
 }
 
 # F15. evaluate biclassification
-base_eval <- function(resp,pred){
+base_classification_eval <- function(resp,pred){
   TP <- sum(resp == 1 & pred == 1)
   FN <- sum(resp == 1 & pred == 0)
   TN <- sum(resp == 0 & pred == 0)
@@ -316,4 +316,12 @@ modify_unformat_time <- function(arr){
   if(is.factor(arr))arr <- fct2ori(arr)
   arr[!grepl('\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}',arr)] <- '1970-01-01 00:00:00'
   as.p(arr)
+}
+
+# F33. return the last element
+last <- function(x) { return( x[length(x)] ) }
+
+# F34. mode of a array of numerical
+mode_num <- function(arr){
+  return(as.numeric(names(sort(-table(arr)))[1]))
 }
