@@ -16,16 +16,16 @@
 #
 #
 
-osFlag = Sys.info()[1] == 'Windows' 
+osFlag = Sys.info()[1] 
 cur_dir <- getwd()
 pare_dir <- dirname(cur_dir)
 
-if(osFlag){
+if(osFlag == 'Windows'){
   dir_c <- 'D:/Git/'
   dir_d <- 'D:/Data/'
 }else{
-  dir_c <- '/home/yiyusheng/Code/R/'
-  dir_d <- '/home/yiyusheng/Data/'
+  dir_c <- '~/Code/R/'
+  dir_d <- '~/Data/'
 }
 
 if(file.exists(file.path(cur_dir,'base_var.R'))){
