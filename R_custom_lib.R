@@ -325,3 +325,15 @@ last <- function(x) { return( x[length(x)] ) }
 mode_num <- function(arr){
   return(as.numeric(names(sort(-table(arr)))[1]))
 }
+
+# F35. clear directory
+clear_dir <- function(dir){
+  fname <- list.files(dir)
+  file.remove(file.path(dir,fname))
+  return(0)
+}
+
+# F36. get index of split
+get_split_index <- function(fct){
+  split(seq_len(length(fct)),fct)
+}
