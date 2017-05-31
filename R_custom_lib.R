@@ -49,8 +49,8 @@ fct2oriX <- function(data){
 }
 
 # F5. Quantile with seq(0,1,0.01)
-quantileX <- function(v,itv = 0.01){
-  quantile(v,seq(0,1,itv),na.rm = T)
+quantileX <- function(v,itv = 0.01,dgt = 4){
+  round(quantile(v,seq(0,1,itv),na.rm = T),digits = dgt)
 }
 
 # F6. match array of attr from A to B(No Merge)
@@ -150,6 +150,15 @@ as.p <- function(ts){
     r <-   as.POSIXct(fct2ori(ts),tz = 'UTC')
   }else if(class(ts) == 'character'){
     r <-   as.POSIXct(ts,tz = 'UTC')
+  }
+  r
+}
+
+as.p1 <- function(ts){
+  if(class(ts) == 'factor'){
+    r <-   as.POSIXct(fct2ori(ts))
+  }else if(class(ts) == 'character'){
+    r <-   as.POSIXct(ts)
   }
   r
 }
