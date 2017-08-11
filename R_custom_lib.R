@@ -103,6 +103,9 @@ list2df <- function(list,n = NULL,br = T,rec = F){
   df <- data.frame(matrix(unlist(list,recursive = rec),byrow = br,nrow = length(list)))
   x <- ifelse(is.null(names(list)),1 == 1,df$item <- names(list))
   x <- ifelse(is.null(n),1 == 1,names(df) <- n)
+  # for(i in seq_len(ncol(df))){
+  #   if(is.list(df[,i]))df[,i] = unlist(df[,i])
+  # }
   df
 }
 
