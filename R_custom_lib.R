@@ -16,8 +16,8 @@
 #
 #
 
-# F1. return a data.frame with all column factored
 factorX <- function(data){
+  #return a data.frame with all column factored
   a <- sapply(data,class)
   for(i in 1:length(a)){
     if(a[i]=='factor')
@@ -26,20 +26,22 @@ factorX <- function(data){
   return(data)
 }
 
-# F2. Convert factor to its original data type
+
 fct2ori <- function(f){
+  #Convert factor to its original data type
   a <- levels(f)[f]
   a
 }
 
-# F3.convert factor to origin, then convert to numeric
+
 fct2num <- function(arr){
+  #convert factor to origin, then convert to numeric
   arr <- as.numeric(fct2ori(arr))
   arr
 }
 
-# F4.return a data.frame with all factor column restored
 fct2oriX <- function(data){
+  #return a data.frame with all factor column restored
   a <- sapply(data,class)
   for(i in 1:length(a)){
     if(a[i]=='factor')
@@ -48,29 +50,37 @@ fct2oriX <- function(data){
   return(data)
 }
 
-# F5. Quantile with seq(0,1,0.01)
+ 
 quantileX <- function(v,itv = 0.01,dgt = 4){
+  #Quantile with seq(0,1,0.01)
   round(quantile(v,seq(0,1,itv),na.rm = T),digits = dgt)
 }
 
-# F6. match array of attr from A to B(No Merge)
+rank_value <- function(arr,x){
+  # get quantile^-1(x)
+  which.min(abs(sort(arr)-x))/length(arr)
+}
+
 mchAttr <- function(dfA,dfB,idxA,idxB,attr){
+  #match array of attr from A to B(No Merge)
   for(a in attr){
     dfA[[a]] <- dfB[[a]][match(dfA[[idxA]],dfB[[idxB]])]
   }
   dfA
 }
 
-# F7.unname all columns in dataframe to remove Attr
+
 unnameX <- function(df){
+  #unname all columns in dataframe to remove Attr
   for(i in 1:length(df)){
     df[,i] <- unname(df[,i])
   }
   df
 }
 
-# F8. Multiplot
+ 
 multiplot <- function(..., plotlist = NULL, file, cols = 1, layout = NULL) {
+  #Multiplot
   require(grid)
   
   plots <- c(list(...), plotlist)
@@ -98,8 +108,9 @@ multiplot <- function(..., plotlist = NULL, file, cols = 1, layout = NULL) {
   }
 }
 
-# F9.convert list from tapply to data.frame
+
 list2df <- function(list,n = NULL,br = T,rec = F){
+  #convert list from tapply to data.frame
   df <- data.frame(matrix(unlist(list,recursive = rec),byrow = br,nrow = length(list)))
   x <- ifelse(is.null(names(list)),1 == 1,df$item <- names(list))
   x <- ifelse(is.null(n),1 == 1,names(df) <- n)
@@ -111,10 +122,11 @@ list2df <- function(list,n = NULL,br = T,rec = F){
 
 
 
-# F10.return multiple value and recive by list
-# from https://raw.githubusercontent.com/ggrothendieck/gsubfn/master/R/list.R
+
 list <- structure(NA,class="result")
 "[<-.result" <- function(x,...,value) {
+  #return multiple value and recive by list
+  # from https://raw.githubusercontent.com/ggrothendieck/gsubfn/master/R/list.R
   args <- as.list(match.call())
   args <- args[-c(1:2,length(args))]
   length(value) <- length(args)
@@ -125,8 +137,9 @@ list <- structure(NA,class="result")
   x
 }
 
-# F11.extract some lines from a data.frame randomly
+
 smp_df <- function(df,perc,rep = F){
+  #extract some lines from a data.frame randomly
   len <- nrow(df)
   if(perc <= 1){
     df[sample(seq_len(len),len*perc,rep),]
@@ -135,8 +148,9 @@ smp_df <- function(df,perc,rep = F){
   }
 }
 
-# F12.order or column change
+
 col_order <- function(df,tar,app){
+  #order or column change
   n <- names(df)
   idx.tar <- which(n == tar)
   
@@ -147,8 +161,9 @@ col_order <- function(df,tar,app){
   df <- df[,newN]
 }
 
-# F13. as.POSIXct convert
+ 
 as.p <- function(ts){
+  #as.POSIXct convert
   if(class(ts) == 'factor'){
     r <-   as.POSIXct(fct2ori(ts),tz = 'UTC')
   }else if(class(ts) == 'character'){
@@ -166,13 +181,15 @@ as.p1 <- function(ts){
   r
 }
 
-# F14. define margin for plot function
+ 
 def_margin <- function(){
+  #define margin for plot function
   par(mar = rep(1,4))
 }
 
-# F15. evaluate biclassification
+ 
 base_classification_eval <- function(resp,pred){
+  #evaluate biclassification
   TP <- sum(resp == 1 & pred == 1)
   FN <- sum(resp == 1 & pred == 0)
   TN <- sum(resp == 0 & pred == 0)
@@ -190,14 +207,16 @@ base_classification_eval <- function(resp,pred){
        fdr = FDR,far = FAR,f1 = F1,acc = ACC)
 }
 
-# F16. change names from A to B in a data.frame
+ 
 change_name <- function(df,n1,n2){
+  #change names from A to B in a data.frame
   names(df)[which(names(df) == n1)] <- n2
   df
 }
 
-# F17.extract string with regexp
+
 extract_reg <- function(pat,str,sameLen = T){
+  #extract string with regexp
   idx_need <- grep(pat,str)
   idx_start <- regexpr(pat,str)
   r <- rep('',length(idx_start))
@@ -348,4 +367,11 @@ clear_dir <- function(dir){
 # F36. get index of split
 get_split_index <- function(fct){
   split(seq_len(length(fct)),fct)
+}
+
+# F37. value limit
+value_limit <- function(arr,vmin,vmax){
+  arr[arr>vmax] <- vmax
+  arr[arr<vmin] <- vmin
+  return(arr)
 }
